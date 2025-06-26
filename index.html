@@ -92,12 +92,19 @@
         const card = document.createElement('div');
         card.className = 'vendor-card';
         card.innerHTML = `
-          <h3>${v.Name || 'No Name'}</h3>
-          <p>📍 ${v.Location || 'Unknown'} | 📞 ${v.Phone || 'N/A'}</p>
-          <p>🧱 ${v.Materials || 'No description provided.'}</p>
+          <h3>${v.Name} ${v.Verified === "Yes" ? '<span style="color:green;">✔ Verified</span>' : ''}</h3>
+          <p>📍 ${v.Location || 'Unknown'} | 🧱 ${v.Materials || 'N/A'}</p>
+          <p>📞 <strong>Contact Locked</strong></p>
+          <button onclick="payForLead('${v.Name}', '${v.Phone}')">Pay ₹20 to Unlock</button>
         `;
         resultsDiv.appendChild(card);
       });
+    }
+
+    function payForLead(name, phone) {
+      const upiLink = "upi://pay?pa=yourupiid@upi&pn=VendorConnect&am=20&cu=INR";
+      alert(`To unlock contact for ${name}, please pay ₹20 via UPI.\n\nAfter payment, you'll receive the contact via email or confirmation.`);
+      window.open(upiLink);
     }
   </script>
 
