@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>India Vendor Connect</title>
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: 0 auto; padding: 20px; }
+    #results { margin-top: 20px; border: 1px solid #ddd; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Find Industrial Suppliers</h1>
+  <input type="text" id="material" placeholder="Material (e.g., Steel Pipes)">
+  <input type="text" id="location" placeholder="Location (e.g., Mumbai)">
+  <button onclick="searchVendors()">Search</button>
+  <div id="results"></div>
+
+  <script>
+    async function searchVendors() {
+      const material = document.getElementById('material').value;
+      const location = document.getElementById('location').value;
+      
+      // Fetch data from Google Sheets
+      const response = await fetch('YOUR_GOOGLE_SCRIPT_URL');
+      const vendors = await response.json();
+      
+      // Simple filter (replace with AI matching later)
+      const results = vendors.filter(v => 
+        v[1].includes(material) && v[2].includes(location));
+      
+      // Display results
+      document.getElementById('results').innerHTML = results.map(v => `
+        <div>
+          <h3>${v[0]}</h3>
+          <p>Material: ${v[1]}, Location: ${v[2]}</p>
+          <button onclick="contactVendor('${v[3]}')">Contact via WhatsApp</button>
+        </div>
+      `).join('');
+    }
+    
+    function contactVendor(phone) {
+      window.open(`https://wa.me/91${phone}?text=I%20need%20your%20product`);
+    }
+  </script>
+</body>
+</html>
