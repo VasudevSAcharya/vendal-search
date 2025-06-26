@@ -1,7 +1,0 @@
-// In index.html
-fetch('matches.json')
-  .then(r => r.json())
-  .then(data => {
-    const results = data["Steel pipes Mumbai"]; 
-    // Display results...
-  });
