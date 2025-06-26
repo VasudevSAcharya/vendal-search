@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendor Connect - India</title>
+  <style>
+    :root {
+      --primary: #007bff;
+      --primary-dark: #0056b3;
+      --bg: #f9fafb;
+      --text: #333;
+      --border: #e1e1e1;
+      --verified: #28a745;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-dark);
+      margin-bottom: 30px;
+      border-bottom: 2px solid var(--primary);
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    input, button {
+      padding: 12px;
+      margin: 10px 5px 20px 0;
+      width: calc(50% - 15px);
+      box-sizing: border-box;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .vendor-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--primary);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .vendor-card h3 {
+      margin: 0 0 5px 0;
+      color: var(--primary-dark);
+    }
+
+    .vendor-card p {
+      margin: 4px 0;
+      font-size: 15px;
+    }
+
+    .verified-badge {
+      color: var(--verified);
+      font-weight: bold;
+      font-size: 14px;
+      margin-left: 5px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+      margin-top: 40px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+      input {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1><span style="color:#007bff">Vendor</span>Connect India</h1>
+
+  <input type="text" id="material" placeholder="Material (e.g. Steel pipes)">
+  <input type="text" id="location" placeholder="Location (e.g. Mumbai)">
+  <button onclick="searchVendors()">Search</button>
+
+  <div id="results"></div>
+
+  <footer>
+    VendorConnect © 2025. Made in India 🇮🇳
+  </footer>
+
+  <script>
+    async function searchVendors() {
+      const material = document.getElementById('material').value.trim();
+      const location = document.getElementById('location').value.trim();
+      const query = `${material} ${location}`.trim();
+
+      const res = await fetch('https://vendy.vasudevsacharya.workers.dev/?q=' + encodeURIComponent(query));
+      const vendors = await res.json();
+
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      if (vendors.length === 0) {
+        resultsDiv.innerHTML = '<p>No matching vendors found.</p>';
+        return;
+      }
+
+      vendors.forEach(v => {
+        const card = document.createElement('div');
+        card.className = 'vendor-card';
+        card.innerHTML = `
+          <h3>
+            ${v.Name}
+            ${v.Verified === "Yes" ? '<span class="verified-badge">✔ Verified</span>' : ''}
+          </h3>
+          <p>📍 ${v.Location || 'Unknown'} | 🧱 ${v.Materials || 'N/A'}</p>
+          <p>📞 <strong>Contact Locked</strong></p>
+          <button onclick="payForLead('${v.Name}', '${v.Phone}')">Pay ₹20 to Unlock</button>
+        `;
+        resultsDiv.appendChild(card);
+      });
+    }
+
+    function payForLead(name, phone) {
+      const upiLink = "upi://pay?pa=yourupiid@upi&pn=VendorConnect&am=20&cu=INR";
+      alert(`To unlock contact for ${name}, please pay ₹20 via UPI.\n\nAfter payment, you'll receive the contact via email or WhatsApp confirmation.`);
+      window.open(upiLink);
+    }
+  </script>
+
+</body>
+</html>
