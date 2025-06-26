@@ -95,15 +95,9 @@
           <h3>${v.Name || 'No Name'}</h3>
           <p>📍 ${v.Location || 'Unknown'} | 📞 ${v.Phone || 'N/A'}</p>
           <p>🧱 ${v.Materials || 'No description provided.'}</p>
-          <button onclick="contactVendor('${v.Phone}')">Contact via WhatsApp</button>
         `;
         resultsDiv.appendChild(card);
       });
-    }
-
-    function contactVendor(phone) {
-      if (!phone) return alert("Phone number missing.");
-      window.open(`https://wa.me/91${phone}?text=Hi,%20I'm%20interested%20in%20your%20products`);
     }
   </script>
 
